@@ -1,11 +1,6 @@
 /**
- * mm_alloc.c
- *
- * LOGIN: cs162-dt
- *
- * +-----------------+
- * | MINI DESIGN DOC |
- * +-----------------+
+ * @author: sg95
+ * @date  : March 2015-ish
  *
  * mm_malloc implementation
  * ------------------------
@@ -71,7 +66,6 @@ print_list()
  * to see if we could split b into two blocks as
  * to not waste space.
  */
-
 void
 split_block (s_block_ptr b, size_t s) 
 {
@@ -97,37 +91,18 @@ split_block (s_block_ptr b, size_t s)
 	b->next = block;
 	b->free = 0;
 
-
 	block->prev = b;
 	block->free = 1;
 	block->size = (size_t) (old_size - (s + align + BLOCK_SIZE));
-
-
-	return;
 }
 
 s_block_ptr
 fusion (s_block_ptr b)
 {
-	/*
-	Idea:
-		1. look at previous and next.
-		2. if they're free, combine.
-		3. return a ptr to the newly constructed block.
-
-
-		* maybe split into cases? i.e.
-	
-		case 1: prev and next both free
-		case 2: only prev free
-		case 3: only next free
-	*/
 
 	s_block_ptr prev = b->prev;
 	s_block_ptr next = b->next;
 
-//	s_block_ptr new;
-	
 	if (prev->free && next->free) {
 		
 
@@ -156,7 +131,8 @@ get_block (void *p)
 
 void print_block(s_block_ptr b)
 {
-	printf("BLOCK: ptr: %p next: %p prev: %p free: %d size: %d\n", (void *)b, (void *) b->next, (void *)b->prev, b->free, b->size);
+	printf("BLOCK: ptr: %p next: %p prev: %p free: %d size: %d\n", 
+		(void *)b, (void *) b->next, (void *)b->prev, b->free, b->size);
 }
 
 
@@ -164,7 +140,6 @@ void print_block(s_block_ptr b)
 s_block_ptr 
 extend_heap (s_block_ptr last, size_t s)
 {
-	
 	// Make sure that start of block is aligned
 	intptr_t initial = (intptr_t) sbrk(0);
 	int align = 4 - (uint64_t) initial % 4;	
@@ -182,13 +157,11 @@ extend_heap (s_block_ptr last, size_t s)
 	memset(block + BLOCK_SIZE, 0, 1);
 	
 	if (last == NULL) {
-
 		block->next = NULL;
 		block->prev = NULL;
 		block->free = 0;
 		block->size = s;
 
-		// Book keeping
 		head = block;
 		last_block = block;
 	}
@@ -216,13 +189,11 @@ find_block (void *address)
 	s_block_ptr curr; 
 
 	for (curr = head; curr; curr = (s_block_ptr) curr->next) {
-
 		void *data = (void *) ((int64_t)curr + BLOCK_SIZE);
 		if (address == data) {
 			return curr; 
 		}
 	}
-	
 	return NULL;
 }
 
@@ -241,21 +212,13 @@ request(size_t request_size)
 			return curr;
 		}
 	}
-
 	return NULL;
 }
 
 /* malloc code */
 void* mm_malloc(size_t size)
 {
-	/*
-
-	1) Try to find a free chunk that fits. If we find something...
-	2) Create new block using sbrk, and then fill it up.
-	*/
-
 	s_block_ptr match = request(size);
-	
 	if (match) {
 		memset((void*) (match + BLOCK_SIZE), 0, match->size);
 		match->free = 0;
@@ -297,7 +260,6 @@ void* mm_realloc(void* ptr, size_t size)
 	}
 	
 	else if (size){
-
 		s_block_ptr new_block = mm_malloc(size);
 
 		// If space can't be found

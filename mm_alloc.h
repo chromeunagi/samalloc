@@ -19,11 +19,9 @@ extern "C" {
 #include <stdint.h>
 #include <stdlib.h>
 
-
 void* mm_malloc(size_t size);
 void* mm_realloc(void* ptr, size_t size);
 void mm_free(void* ptr);
-
 
 typedef struct s_block *s_block_ptr;
 
@@ -49,8 +47,8 @@ s_block_ptr get_block (void *p);
  */
 s_block_ptr extend_heap (s_block_ptr last , size_t s);
 
+/* Finds the best size-match possible */
 s_block_ptr find_suitable_match (size_t request_size);
-
 
 #ifdef __cplusplus
 }
