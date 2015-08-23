@@ -23,7 +23,6 @@
  *    a. If that turns out to be null, the allocation failed. Return null.
  *    b. Otherwise, use memcpy to copy over the data!
  *    c. Be sure to free ptr!
- *
  */
 
 #include <stdint.h>
@@ -99,7 +98,6 @@ split_block (s_block_ptr b, size_t s)
 s_block_ptr
 fusion (s_block_ptr b)
 {
-
 	s_block_ptr prev = b->prev;
 	s_block_ptr next = b->next;
 
